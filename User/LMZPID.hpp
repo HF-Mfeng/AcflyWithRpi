@@ -63,7 +63,7 @@ public:
 		return this->PIDControl_byDiff(this->setPoint - value, way);
 	}
 	double sameple_time_ms; // 每次调节的时间,单位 ms
- enum ways
+ enum ways // 位置式与增量式
 	{
 		Position,
 		Incremental

@@ -46,7 +46,7 @@ void LMZ_SendMessage(string stre, vector<double> &value){
 }
 
 
-// 接收并解析数据
+// 接收并解析数据（去掉报头与报尾），返回数据字符串string
 string receiveData(){
 	//rpi_setBauds(57600);
 	string rout;
