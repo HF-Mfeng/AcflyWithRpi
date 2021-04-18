@@ -23,6 +23,10 @@
 > - /User/raspberry.cpp 和 raspberry.h
 >
 >   > 使用串口8与树莓派收发数据，包括设置波特率，发送数据，接收数据并去报头
+>   >
+>   > 报头：QQ（个数不定）
+>   >
+>   > 报尾：W  （个数不定）
 >
 > - /User/LMZLink.hpp
 >
