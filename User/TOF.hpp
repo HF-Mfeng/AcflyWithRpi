@@ -64,7 +64,7 @@ public:
 			this->distance = -1;
 			if(  datas[0] == head[0] 
 				&& datas[1] == head[1]
-				&& datas[11] == 0x00
+				// && (datas[11] == 0x00 || datas[11] == 0x02)
 			){  // 数据可用
 						this->distance = (double) (datas[8]<<8|datas[9]<<16|datas[10]<<24)/2560.0f;
 				}
@@ -73,7 +73,7 @@ public:
 //				if(this->distance < 0){
 //					createError();
 //				}
-				
+				this->errorInformation = "status = " + to_string(datas[11]) ;
 				datas.clear();
 				return this->distance;
 		}

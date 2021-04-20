@@ -385,6 +385,11 @@ RTL:
 				
 #ifdef 	Ourselves_M35_Auto1_cpp
 				
+//#define TOFSenseTest
+#ifdef TOFSenseTest
+				double dis =  myTofSence.getTOFdistance();
+				LMZ_SendMessage("distance = " + to_string(dis) + ", " + myTofSence.errorInformation + " \n");
+#else	
 				// 告诉树莓派，已经进入命令模式
 				if(sendMessageToRpi){
 					LMZ_SendMessage("EnterMode");
@@ -407,6 +412,7 @@ RTL:
 				
 				// 执行命令
 				rpiCmd.JudgeMode(str_commnd);
+#endif		
 				
 #else
 				//根据mission_ind状态判断当前需要执行什么飞行动作

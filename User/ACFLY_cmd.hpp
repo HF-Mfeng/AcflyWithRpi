@@ -163,7 +163,7 @@ public:
   
 	//控制离墙距离
 	void Distance_wall(){
-		double pidvx,maxvx;
+		double pidvx,maxvx = 10;
 
 		double distance_wall,wall_dis = 0;
 		for (int i = 0; i < Curcmd.params.size(); i++)
@@ -171,7 +171,9 @@ public:
 			if (Curcmd.params[i] == std::string("wall_dis"))
 			{
 				wall_dis = Curcmd.paramsValue[i];  
-			}  
+			}else if(Curcmd.params[i] == std::string("vmax")){
+				maxvx = Curcmd.paramsValue[i];  
+			}
 		}
 /*---------------------执行命令------------------------*/
 		distance_wall = myTOF.getTOFdistance();  //获取距离
@@ -180,12 +182,12 @@ public:
 		
 		if(abs(pidvx) <= 5)         //贴入精确范围后缩小幅度
 		{
-			maxvx = 3;
+			maxvx = 5 ;
 			this->sum++;
 		}
 		else
 		{
-			maxvx = 5;
+			// maxvx = 10;
 			this->sum = 0;
 		}
 		if(abs(pidvx) > maxvx)
@@ -193,11 +195,19 @@ public:
 			pidvx = maxvx*(pidvx/abs(pidvx));  //限幅
 		}
 //									HHK_SendDistance(pidvx); 
-		LMZ_SendMessage("distance_wall = " + to_string(distance_wall) + " , pidvx = " + to_string(pidvx) + "sum = " + to_string(this->sum));
-		if(distance_wall <  0)
+		if(distance_wall <  0){
 			pidvx = 0;
-		Position_Control_set_TargetVelocityBodyHeadingXY_AngleLimit(pidvx,0);
-		Position_Control_set_ZLock();
+			Position_Control_set_ZLock();
+			Position_Control_set_XYLock();
+		//	LMZ_SendMessage("TOFSense error! Status:" + myTOF.errorInformation + " \n");
+		}else{
+			Position_Control_set_TargetVelocityBodyHeadingXY_AngleLimit(pidvx,0);
+			Position_Control_set_ZLock();			
+		//	LMZ_SendMessage("distance_wall = " + to_string(distance_wall) + " \v");
+		}
+		LMZ_SendMessage("Tdistance = " + to_string(distance_wall) + " --> " + myTOF.errorInformation + " \n");
+	//	LMZ_SendMessage("distance_wall = " + to_string(distance_wall) + " , pidvx = " + to_string(pidvx) + " , sum = " + to_string(this->sum));
+
 		if(this->sum == 5)   //确保位置稳定
 		{
 			this->sum = 0;
