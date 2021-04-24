@@ -390,6 +390,8 @@ RTL:
 				double dis =  myTofSence.getTOFdistance();
 				LMZ_SendMessage("distance = " + to_string(dis) + ", " + myTofSence.errorInformation + " \n");
 #else	
+//				double dis =  myTofSence.getTOFdistance();
+//				LMZ_SendMessage("!" + to_string(dis) + "<");  // 报头是!, 报尾是<
 				// 告诉树莓派，已经进入命令模式
 				if(sendMessageToRpi){
 					LMZ_SendMessage("EnterMode");

@@ -104,34 +104,32 @@ public:
 		{
 			if (Curcmd.params[i] == std::string("posx"))
 			{
-				posx = Curcmd.paramsValue[i];  
+				posx = Curcmd.paramsValue[i]/100;  
 			}	
 			else if (Curcmd.params[i] == std::string("posy"))
 			{
-				posy = Curcmd.paramsValue[i];  
+				posy = Curcmd.paramsValue[i]/100;  
 			} 
 			else if (Curcmd.params[i] == std::string("posz"))
 			{
-				posz = Curcmd.paramsValue[i];  
+				posz = Curcmd.paramsValue[i]/100;  
 			} 
 		}
 /*-------------------------执行命令------------------------------------------*/
-			if(this->pos_judge == 0)
-			{
-				Position_Control_set_TargetPositionXYZRelativeBodyheading(posx,posy,posz);
-				this->pos_judge = 1;
-			}
-			if(this->pos_judge == 1)
-			{
-				Position_ControlMode pos_mode;   
-				get_Position_ControlMode(&pos_mode);
-				if(pos_mode == Position_ControlMode_Position)      
-				{
-					this->pos_judge = 0;
-					Curcmd.clearAllData();
-					freeStatus = true ;
-					LMZ_SendMessage(string("distanceControlOK"));
-				}
+			double params[7];
+			params[0] = 0;
+			params[1] = 0;
+			params[2] = 0;
+			params[3] = 360;
+			params[4] = posx;	params[5] = posy;
+			params[6] = posz;
+			int16_t res = Process_NavCmd( MAV_CMD_NAV_WAYPOINT, freq, MAV_FRAME_BODY_FLU, params, &navInf );
+			if( NavCmdRs_SuccessOrFault(res) )
+			{	//飞直线完成
+				init_NavCmdInf(&navInf);  // 重新初始化
+				Curcmd.clearAllData();
+				freeStatus = true ;
+				LMZ_SendMessage(string("DistanceControlOK"));
 			}
 	}
 	
